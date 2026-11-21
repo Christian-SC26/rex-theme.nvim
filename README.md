@@ -15,7 +15,7 @@ This is an unofficial plugin. It reads Rex's preferences and controls Rex throug
 - macOS with Rex installed. On other systems the slots and the picker still work, but there is no sync and no `rex-*` themes.
 - Neovim 0.10+.
 - The `rex` CLI on `PATH`, with **Remote Control** turned on in Rex Settings > Rex Server. Neovim needs this to change Rex's theme.
-- Optional: [snacks.nvim](https://github.com/folke/snacks.nvim) for the live preview picker. Without it, `vim.ui.select` is used.
+- Optional: [snacks.nvim](https://github.com/folke/snacks.nvim) for the live preview picker (LazyVim includes it). Without it, the picker uses `vim.ui.select` with no preview. `:colorscheme` still syncs.
 
 ## Install
 
@@ -34,13 +34,36 @@ This is an unofficial plugin. It reads Rex's preferences and controls Rex throug
 }
 ```
 
-The plugin picks the colorscheme itself, so turn off any other colorscheme setup. With LazyVim:
+Colorscheme plugins you want to choose from can stay `lazy = true`; lazy.nvim loads them on `:colorscheme`.
+
+**LazyVim** sets a colorscheme at startup, so turn that off. Add this to the spec above:
 
 ```lua
 { "LazyVim/LazyVim", opts = { colorscheme = function() end } },
 ```
 
-Colorscheme plugins you want to choose from can stay `lazy = true`; lazy.nvim loads them on `:colorscheme`.
+LazyVim already maps <kbd>leader</kbd><kbd>u</kbd><kbd>C</kbd> to its own picker. The `keys` above replace it.
+
+[vim.pack](https://neovim.io/doc/user/pack.html#vim.pack) (Neovim 0.12+), or any manager that doesn't call `setup()` for you:
+
+```lua
+vim.pack.add({
+  "https://github.com/Christian-SC26/rex-theme.nvim",
+  -- colorschemes to choose from, e.g. "https://github.com/rebelot/kanagawa.nvim",
+})
+
+require("rex-theme").setup({
+  fallback = { dark = "habamax", light = "default" },
+})
+
+vim.keymap.set("n", "<leader>uC", function() require("rex-theme").pick() end, { desc = "Colorscheme" })
+vim.keymap.set("n", "<leader>uB", function() require("rex-theme").toggle_transparent() end, { desc = "Transparent background" })
+```
+
+Call `setup()` early in `init.lua`, before anything that draws the UI.
+
+> [!IMPORTANT]
+> Remove every `vim.cmd.colorscheme(...)` / `colorscheme ...` from your config. rex-theme picks the colorscheme itself. Every `:colorscheme` counts as a pick, so a leftover one would overwrite your saved theme on each start and push it to Rex.
 
 ## Usage
 
