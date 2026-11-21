@@ -2,6 +2,8 @@
 
 Keep Neovim and Rex (the terminal by Superlogical) on the same color theme, in both directions, with separate dark and light themes.
 
+https://github.com/user-attachments/assets/efcf46d1-14c9-49d6-b60f-c20a2d8bf87e
+
 - **Every Rex theme in Neovim.** All built-in and imported Rex themes become colorschemes named `rex-<id>` (`:colorscheme rex-static-noir`). The editor UI uses the theme's own interface colors from Rex, and syntax uses its 16 terminal colors.
 - **Every Neovim theme in Rex.** When you pick a colorscheme, it is exported from its live highlight colors and imported into Rex as `<name> (nvim)`. You don't need Ghostty or any other theme file.
 - **Separate dark and light slots, like Rex.** Picking a theme shows it right away and saves it to the slot of its own appearance. The macOS appearance decides which slot you see. A change made in Rex shows up in Neovim within about a second.
